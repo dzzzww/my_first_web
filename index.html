@@ -56,14 +56,35 @@
             box-sizing: border-box;
             line-height: 1.4;
         }
-            .box a
-            {
-                color: #0645ad;
-            }
-        .category {
-            margin-bottom: 75px;
-            text-align: left;
+        .box a {
+            color: rgb(6, 69, 173);
         }
+        .category-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        .category {
+            margin-bottom: 0;
+            min-width: 0;
+        }
+        .item-grid {
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.55);
+            border: 2px solid lightblue;
+            border-radius: 8px;/*边缘圆化*/
+            padding: 10px;
+            text-align: left;
+            line-height: 1.4;
+            box-sizing: border-box;
+        }
+
     </style>
 </head>
 <body>
@@ -92,31 +113,35 @@
     <div class="boxother" id="box3">
         <h2>模组介绍存放块</h2>
         <p>施工中</p>
-        <div class="category">
-            <h3>武器</h3>
-            <div class="item-grid">
-                <div class="item">武器 A</div>
-                <div class="item">武器 B</div>
-                <div class="item">武器 C</div>
-                <div class="item">武器 D</div>
-            </div>
-        </div>
-        <div class="category">
-            <h3>饰品</h3>
-            <div class="item-grid">
-                <div class="item">饰品 A</div>
-                <div class="item">饰品 B</div>
-                <div class="item">饰品 C</div>
-            </div>
-        </div>
-        <div class="category">
-            <h3>原版调整</h3>
-            <div class="item-grid">
-                <div class="item">动画更改</div>
-                <div class="item">Boss新增掉落物</div>
-                <div class="item">Boss数值调整</div>
+
+        <div class="category-container">
+            <div class="category">
+                <h3>武器</h3>
+                <div class="item-grid">
+                    <div class="item">武器 A</div>
+                    <div class="item">武器 B</div>
+                    <div class="item">武器 C</div>
+                    <div class="item">武器 D</div>
+                </div>
             </div>
 
+            <div class="category">
+                <h3>饰品</h3>
+                <div class="item-grid">
+                    <div class="item">饰品 A</div>
+                    <div class="item">饰品 B</div>
+                    <div class="item">饰品 C</div>
+                </div>
+            </div>
+            <div class="category">
+                <h3>其他调整</h3>
+                <div class="item-grid">
+                    <div class="item">动画更改</div>
+                    <div class="item">Boss新增掉落物</div>
+                    <div class="item">Boss数值调整</div>
+                </div>
+            </div>
         </div>
+    </div>
 </body>
 </html>
