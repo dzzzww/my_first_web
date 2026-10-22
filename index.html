@@ -1,35 +1,38 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>我的个人网页</title>
     <style>
-        h1 
-        {
+        h1 {
             text-align: center;
             font-weight: bold;
         }
+
         .note {
             background: lightblue;
             display: inline-block;
             padding: 2px 6px;
         }
+
         body {
             text-align: center;
             background-color: rgb(212, 250, 252);
-            background-image: url('backg.png');
+            background-image: url("backg.png");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             background-repeat: no-repeat;
         }
+
         .box img {
             width: 20px;
             height: auto;
             vertical-align: middle;
             margin-right: 6px;
         }
+
         .box {
             width: 600px;
             max-width: calc(100% - 20px);
@@ -43,7 +46,8 @@
             box-sizing: border-box;
             line-height: 1.2;
         }
-        .boxother{
+
+        .boxother {
             width: 1000px;
             max-width: calc(100% - 20px);
             min-height: 600px;
@@ -56,92 +60,337 @@
             box-sizing: border-box;
             line-height: 1.4;
         }
+
         .box a {
             color: rgb(6, 69, 173);
         }
+
         .category-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
             align-items: start;
         }
+
         .category {
             margin-bottom: 0;
             min-width: 0;
         }
         .item-grid {
             display: grid;
-            grid-template-columns: 1fr; 
+            grid-template-columns: 1fr;
             gap: 10px;
             margin-top: 10px;
         }
+
         .item {
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 1);
             border: 2px solid lightblue;
-            border-radius: 8px;/*边缘圆化*/
+            border-radius: 8px; /*边缘圆化*/
             padding: 10px;
             text-align: left;
             line-height: 1.4;
             box-sizing: border-box;
         }
 
+        /* ---- 折叠标题（点击这一行展开/收起下面的内容） ---- */
+        .category h3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 0;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid lightblue;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .category h3:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .category h3:focus-visible {
+            outline: 2px dashed rgb(6, 69, 173);
+            outline-offset: 2px;
+        }
+
+        /* 折叠符号（用 SVG 绘制，避免不同系统符号显示不一致） */
+        .arrow {
+            display: inline-block;
+            flex: none;
+            width: 12px;
+            height: 12px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 1 L9 6 L3 11' fill='none' stroke='%230645ad' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+            transition: transform 0.25s;
+        }
+
+        .category.open h3 .arrow {
+            transform: rotate(90deg);
+        }
+
+        .category .item-grid {
+            display: none; /* 默认堆叠收起 */
+        }
+
+        .category.open .item-grid {
+            display: grid; /* 展开后内容从上往下依次列出 */
+            animation: unfold 0.25s ease;
+        }
+
+        @keyframes unfold {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---- 二级折叠：其他调整内部的三个子项 ---- */
+        .sub-collapse {
+            margin: 0;
+        }
+
+        .sub-collapse > .sub-title {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            width: 100%;
+            margin: 0;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid lightblue;
+            border-radius: 8px;
+            cursor: pointer;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+            box-sizing: border-box;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .sub-collapse > .sub-title:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .sub-collapse > .sub-title:focus-visible {
+            outline: 2px dashed rgb(6, 69, 173);
+            outline-offset: 2px;
+        }
+
+        .sub-collapse.open > .sub-title .arrow {
+            transform: rotate(90deg);
+        }
+
+        .sub-collapse > .sub-grid {
+            display: none;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 8px;
+            margin-left: 12px; /* 缩进，体现嵌套层级 */
+        }
+
+        .sub-collapse.open > .sub-grid {
+            display: grid;
+            animation: unfold 0.25s ease;
+        }
+
+        .sub-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid lightblue;
+            border-radius: 8px;
+            padding: 8px 10px;
+            text-align: left;
+            line-height: 1.4;
+            box-sizing: border-box;
+        }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>我的个人网页</h1>
     <p1>你好，这是我的个人网页</p1>
-    <br>
+    <br />
     <p2>欢迎在tmodloader的创意工坊上订阅我的模组！</p2>
-    <br>
+    <br />
     <span class="note">“更多拓展物品”</span>
 
     <div class="box" id="box1">
-        <br> wiki存放块
-        <br> <a href="https://terraria.wiki.gg/zh/" target="_blank" rel="noopener"><img src="Ttitle.png" alt="Ttitle">泰拉瑞亚维基</a>
-        <br> <a href="https://calamity.huijiwiki.com/wiki/%E9%A6%96%E9%A1%B5" target="_blank" rel="noopener"><img src="Ctitle.png" alt="Ctitle">灾厄模组维基</a>
-        <br> <a href="https://thoriummod.wiki.gg/zh/" target="_blank" rel="noopener"><img src="Thtitle.png" alt="Thtitle">瑟银模组维基</a>
-        <br> <a href="https://fargosmods.wiki.gg/zh/" target="_blank" rel="noopener"><img src="Ftitle.png" alt="Ftitle">Fargo模组维基</a>
-        <br> <a href="https://isaac.huijiwiki.com/wiki/%E9%A6%96%E9%A1%B5" target="_blank" rel="noopener"><img src="Ititle.png" alt="Ititle">以撒的结合(忏悔+)维基</a>
+      <br />
+      wiki存放块 <br />
+      <a href="https://terraria.wiki.gg/zh/" target="_blank" rel="noopener"
+        ><img src="Ttitle.png" alt="Ttitle" />泰拉瑞亚维基</a
+      >
+      <br />
+      <a
+        href="https://calamity.huijiwiki.com/wiki/%E9%A6%96%E9%A1%B5"
+        target="_blank"
+        rel="noopener"
+        ><img src="Ctitle.png" alt="Ctitle" />灾厄模组维基</a
+      >
+      <br />
+      <a href="https://thoriummod.wiki.gg/zh/" target="_blank" rel="noopener"
+        ><img src="Thtitle.png" alt="Thtitle" />瑟银模组维基</a
+      >
+      <br />
+      <a href="https://fargosmods.wiki.gg/zh/" target="_blank" rel="noopener"
+        ><img src="Ftitle.png" alt="Ftitle" />Fargo模组维基</a
+      >
+      <br />
+      <a
+        href="https://isaac.huijiwiki.com/wiki/%E9%A6%96%E9%A1%B5"
+        target="_blank"
+        rel="noopener"
+        ><img src="Ititle.png" alt="Ititle" />以撒的结合(忏悔+)维基</a
+      >
     </div>
     <div class="box" id="box2">
-        <br>工具存放块
-        <br> <a href="https://ezgif.com/" target="_blank" rel="noopener"><img src="Gtitle.png" alt="Gtitle">视频，gif格式转换</a>
-        <br> <a href="https://trtool.yingtaoshu.org/" target="_blank" rel="noopener"><img src="Atitle.png" alt="Atitle">盔甲绘制</a>
-        <br> <a href="https://www.aigei.com/sound/class/?wd=%E9%9F%B3%E6%95%88%E7%B4%A0%E6%9D%90%E4%B8%8B%E8%BD%BD%E7%BD%91%E7%AB%99&msclkid=9581b5f2f2381a800aa3dfdcf8dd4da0" target="_blank" rel="noopener"><img src="Stitle.png" alt="Stitle">音效库</a>
-        <br> <a href="https://github.com/" target="_blank" rel="noopener"><img src="Gittitle.png" alt="Gittitle">Github</a>
+      <br />工具存放块 <br />
+      <a href="https://ezgif.com/" target="_blank" rel="noopener"
+        ><img src="Gtitle.png" alt="Gtitle" />视频.gif格式转换</a
+      >
+      <br />
+      <a href="https://trtool.yingtaoshu.org/" target="_blank" rel="noopener"
+        ><img src="Atitle.png" alt="Atitle" />盔甲绘制</a
+      >
+      <br />
+      <a
+        href="https://www.aigei.com/sound/class/?wd=%E9%9F%B3%E6%95%88%E7%B4%A0%E6%9D%90%E4%B8%8B%E8%BD%BD%E7%BD%91%E7%AB%99&msclkid=9581b5f2f2381a800aa3dfdcf8dd4da0"
+        target="_blank"
+        rel="noopener"
+        ><img src="Stitle.png" alt="Stitle" />音效库</a
+      >
+      <br />
+      <a href="https://github.com/" target="_blank" 
+         rel="noopener"
+        ><img src="Gittitle.png" alt="Gittitle" />Github</a
+      >
+           <br />
+      <a
+        href="https://www.kdocs.cn/l/crP1DDFrTik8"
+        target="_blank"
+        rel="noopener"
+        ><img src="Tutitle.png" alt="Tutitle" />教程</a
+      >
     </div>
     <div class="boxother" id="box3">
-        <h2>模组介绍存放块</h2>
-        <p>施工中</p>
+      <h2>模组介绍存放块</h2>
+      <p>施工中</p>
 
-        <div class="category-container">
-            <div class="category">
-                <h3>武器</h3>
-                <div class="item-grid">
-                    <div class="item">武器 A</div>
-                    <div class="item">武器 B</div>
-                    <div class="item">武器 C</div>
-                    <div class="item">武器 D</div>
-                </div>
-            </div>
-
-            <div class="category">
-                <h3>饰品</h3>
-                <div class="item-grid">
-                    <div class="item">饰品 A</div>
-                    <div class="item">饰品 B</div>
-                    <div class="item">饰品 C</div>
-                </div>
-            </div>
-            <div class="category">
-                <h3>其他调整</h3>
-                <div class="item-grid">
-                    <div class="item">动画更改</div>
-                    <div class="item">Boss新增掉落物</div>
-                    <div class="item">Boss数值调整</div>
-                </div>
-            </div>
+      <div class="category-container">
+        <div class="category">
+          <h3><span class="arrow" aria-hidden="true"></span>武器</h3>
+          <div class="item-grid">
+            <div class="item">武器 A</div>
+            <div class="item">武器 B</div>
+            <div class="item">武器 C</div>
+            <div class="item">武器 D</div>
+          </div>
         </div>
+
+        <div class="category">
+          <h3><span class="arrow" aria-hidden="true"></span>饰品</h3>
+          <div class="item-grid">
+            <div class="item">饰品 A</div>
+            <div class="item">饰品 B</div>
+            <div class="item">饰品 C</div>
+          </div>
+        </div>
+        <div class="category">
+          <h3><span class="arrow" aria-hidden="true"></span>其他调整</h3>
+          <div class="item-grid">
+            <div class="sub-collapse">
+              <button type="button" class="sub-title">
+                <span class="arrow" aria-hidden="true"></span>动画更改
+              </button>
+              <div class="sub-grid">
+                <!-- 在此填写“动画更改”的子条目，可自由增删 -->
+                <div class="sub-item">内容 A</div>
+                <div class="sub-item">内容 B</div>
+              </div>
+            </div>
+            <div class="sub-collapse">
+              <button type="button" class="sub-title">
+                <span class="arrow" aria-hidden="true"></span>Boss新增掉落物
+              </button>
+              <div class="sub-grid">
+                <!-- 在此填写“Boss新增掉落物”的子条目，可自由增删 -->
+                <div class="sub-item">内容 A</div>
+                <div class="sub-item">内容 B</div>
+              </div>
+            </div>
+            <div class="sub-collapse">
+              <button type="button" class="sub-title">
+                <span class="arrow" aria-hidden="true"></span>Boss数值调整
+              </button>
+              <div class="sub-grid">
+                <!-- 在此填写“Boss数值调整”的子条目，可自由增删 -->
+                <div class="sub-item">内容 A</div>
+                <div class="sub-item">内容 B</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+
+    <script>
+      // 点击分类标题，展开/收起下方的条目（从上往下列出）
+      document.querySelectorAll(".category > h3").forEach(function (title) {
+        var category = title.parentElement;
+        var grid = category.querySelector(".item-grid");
+        if (!grid) return;
+
+        title.setAttribute("role", "button");
+        title.setAttribute("tabindex", "0");
+
+        function apply(open) {
+          category.classList.toggle("open", open);
+          title.setAttribute("aria-expanded", open ? "true" : "false");
+        }
+
+        // 初始状态：第一个分类展开，其余收起
+        apply(category === document.querySelector(".category"));
+
+        title.addEventListener("click", function () {
+          apply(!category.classList.contains("open"));
+        });
+
+        title.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+            event.preventDefault();
+            apply(!category.classList.contains("open"));
+          }
+        });
+      });
+
+      // 二级折叠：其他调整里的三个子项各自展开/收起
+      document.querySelectorAll(".sub-collapse > .sub-title").forEach(function (btn) {
+        var sub = btn.parentElement;
+        var grid = sub.querySelector(".sub-grid");
+        if (!grid) return;
+
+        function applySub(open) {
+          sub.classList.toggle("open", open);
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+        }
+
+        applySub(false); // 默认收起
+
+        btn.addEventListener("click", function () {
+          applySub(!sub.classList.contains("open"));
+        });
+      });
+    </script>
+  </body>
 </html>
